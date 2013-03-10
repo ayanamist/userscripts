@@ -4,7 +4,7 @@
 // @description Replace t.co href of A tag with real url.
 // @match http://twitter.com/*
 // @match https://twitter.com/*
-// @version 1.0
+// @version 1.1
 // ==/UserScript==
 (function (window) {
     var document = window.document;
@@ -21,10 +21,14 @@
         };
     };
     var expandAllLink = function () {
+        var expandedUrl;
         Array.prototype.forEach.call(document.querySelectorAll("a.twitter-timeline-link:not(.timeline-link-expanded)"),
             function (node) {
                 if (/^http(?:s)?:\/\/t\.co\/[0-9A-Za-z]+$/g.test(node.href)) {
-                    node.href = node.getAttribute("data-expanded-url");
+                    expandedUrl = node.getAttribute("data-expanded-url");
+                    if (expandedUrl) {
+                        node.href = expandedUrl;
+                    }
                     node.className += " timeline-link-expanded";
                 }
             });
